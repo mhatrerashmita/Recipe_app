@@ -1,0 +1,324 @@
+<h1>Dashboard : Welcome !! {{ request.user.username }}</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+        }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            background-color: #343a40;
+            color: #fff;
+            padding: 20px;
+        }
+        .sidebar a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            padding: 10px 0;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .heart-icon {
+            margin-left: 180px;
+        }
+        .heart-icon i {
+            font-size: 24px;
+            color: red;
+        }
+        .card-img-top {
+            object-fit: cover;
+            height: 200px;
+        }
+        .modal-header {
+            background-color: #343a40;
+            color: white;
+        }
+        .modal-footer button {
+            min-width: 100px;
+        }
+        .btn-dark {
+            background-color: #343a40;
+            border: none;
+        }
+        .btn-dark:hover {
+            background-color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+      
+        <a href="#"><i class="fa fa-tachometer-alt"></i> Dashboard</a>
+        <a href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+        <a href="#"><i class="fa fa-tasks"></i> Manage Items</a>
+        <a href="#"><i class="fa fa-chart-line"></i> Reports</a>
+        <a href="#"><i class="fa fa-cog"></i> Settings</a>
+        <a href="{% url 'logout' %}" class="btn btn-dark">Logout</a>
+    </div>
+    <div class="main-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Profile Overview</h5>
+                            <p class="card-text">{{ request.user.username }}</p>
+                            <p class="card-text">{{ request.user.email }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% comment %} <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Profile Picture</h5>
+                            <img src="https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png" class="img-fluid rounded-circle" alt="Default User Picture" style="width: 100px;">
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+                <div class="container">
+                    <div class="d-flex mb-3 justify-content-between align-items-center">
+                        <a href="" data-bs-toggle="modal" data-bs-target="#addnewrecipeModal" class="btn btn-warning px-3 btn-sm">Add new Recipe</a>
+                        <div class="">
+                            <form method="post" class="d-flex my-2">
+                                {% csrf_token %}
+                                <input type="search" name="query" class="form-control" placeholder="search..." value="{{search_query}}">
+                                <button class="btn btn-success btn-sm px-3 mx-2" name="search">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="mb-3 alert alert-success text-center">
+                                {{message}}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="row">
+                        {% for recipe in recipes %}
+                        <div class="card" style="width: 18rem; margin: 15px;">
+                            {% if recipe.image %}
+                                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}">
+                            {% else %}
+                                <img src="path/to/placeholder/image.jpg" class="card-img-top" alt="No image available">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ recipe.title }}</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Author: {{ recipe.author }}</li>
+                                {% comment %} <li class="list-group-item">Description: {{ recipe.description }}</li>
+                                <li class="list-group-item">Ingredients: {{ recipe.ingredients }}</li> {% endcomment %}
+                            </ul>
+                            <div class="card-body">
+                                <a href="" data-bs-toggle="modal" data-bs-target="#updatenewrecipeModal_{{recipe.id}}" class="btn btn-sm btn-success"><i class="fa-regular fa-pen-to-square"></i></a>
+                                <a href="" data-bs-toggle="modal" data-bs-target="#deleterecipeModal_{{recipe.id}}" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                <a href="" data-bs-toggle="modal" data-bs-target="#viewnewrecipeModal_{{recipe.id}}" class="btn btn-sm btn-warning"><i class="fa-solid fa-eye"></i></a>
+                                <div class="heart-icon">
+                    <i onclick="myFunction(this)" class="fa-regular fa-heart"></i>
+                    <script>
+                      function myFunction(element) {
+                          if (element.classList.contains('fa-regular')) {
+                              element.classList.remove('fa-regular');
+                              element.classList.add('fa-solid');
+                          } else {
+                              element.classList.remove('fa-solid');
+                              element.classList.add('fa-regular');
+                          }
+                      }
+                  </script>
+                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="viewnewrecipeModal_{{ recipe.id }}" tabindex="-1" aria-labelledby="viewnewrecipeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="viewnewrecipeModalLabel">{{ recipe.title }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="card" style="width: 100%;">
+                                          
+                                            {% if recipe.image %}
+                                                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}">
+                                            {% else %}
+                                                <img src="path/to/placeholder/image.jpg" class="card-img-top" alt="No image available">
+                                            {% endif %}
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ recipe.title }}</h5>
+                                                {% if recipe.video %}
+                                                    <video controls class="card-img-top" style="margin-top: 15px;">
+                                                        <source src="{{ recipe.video.url }}" type="video/mp4">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                {% else %}
+                                                    <p>No video available.</p>
+                                                {% endif %}
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item">Author: {{ recipe.author }}</li>
+                                                    <li class="list-group-item">Description: {{ recipe.description }}</li>
+                                                    <li class="list-group-item">Ingredients: {{ recipe.ingredients }}</li>
+                                                </ul>
+                                                <div class="card-body">
+                                                    <a href="" data-bs-toggle="modal" data-bs-target="#updatenewrecipeModal_{{ recipe.id }}" class="btn btn-sm btn-success">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Edit
+                                                    </a>
+                                                    <a href="" data-bs-toggle="modal" data-bs-target="#deleterecipeModal_{{ recipe.id }}" class="btn btn-sm btn-danger">
+                                                        <i class="fa-solid fa-trash"></i> Delete
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>
+                          
+                
+                        <!-- Update Recipe Modal -->
+                        <div class="modal fade" id="updatenewrecipeModal_{{recipe.id}}" tabindex="-1" aria-labelledby="updatenewrecipeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <form action="" method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="updatenewrecipeModalLabel">Update Recipe</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" name="id" value="{{recipe.id}}">
+                                            <div class="mb-3">
+                                                <label for="title">Recipe Title</label>
+                                                <input required type="text" name="title" class="form-control" value="{{recipe.title}}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="author">Recipe Author</label>
+                                                <input required type="text" name="author" class="form-control" value="{{recipe.author}}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="description">Recipe Description</label>
+                                                <textarea required name="description" class="form-control">{{recipe.description}}</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="ingredients">Recipe Ingredients</label>
+                                                <textarea required name="ingredients" class="form-control">{{recipe.ingredients}}</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="image">Recipe Image</label>
+                                                <input type="file" name="image" class="form-control">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="video">Recipe video</label>
+                                                <input type="file" name="video" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary" name="update">Update Recipe</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                
+                        <!-- Delete Recipe Modal -->
+                        <div class="modal fade" id="deleterecipeModal_{{recipe.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleterecipeModal_{{recipe.id}}Label" aria-hidden="true" >
+                            <div class="modal-dialog">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{recipe.id}}">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete this recipe?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-danger" name="delete">Delete Recipe</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            
+                <!-- Add New Recipe Modal -->
+                <div class="modal fade" id="addnewrecipeModal" tabindex="-1" aria-labelledby="addnewrecipeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form action="{% url 'add_recipe' %}" method="post" enctype="multipart/form-data">
+
+                            {% csrf_token %}
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="addnewrecipeModalLabel">Add New Recipe</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="title">Recipe Title</label>
+                                        <input required type="text" name="title" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="author">Recipe Author</label>
+                                        <input required type="text" name="author" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="description">Recipe Description</label>
+                                        <textarea required name="description" class="form-control"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="ingredients">Recipe Ingredients</label>
+                                        <textarea required name="ingredients" class="form-control"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="image">Recipe Image</label>
+                                        <input type="file" name="image" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="video">Recipe video</label>
+                                        <input type="file" name="video" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary" name="create">Add Recipe</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

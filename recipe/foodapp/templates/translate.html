@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% trans "Recipe Page" %}</title>
+  
+    <style>
+        /* Add custom styles here, if needed */
+        .language-form {
+          display: inline-block;
+        }
+        .language-label {
+          display: inline-block;
+          margin-right: 5px;
+        }
+        .language-select {
+          display: inline-block;
+        }
+    </style>
+   
+</head>
+<body>
+
+    <form class="language-form" id="languageForm" method="post" action="{% url 'set_language' %}">
+        {% csrf_token %}
+        <label class="language-label" for="language">{% trans "Lang:" %}</label>
+        <select class="language-select" name="language" id="language" onchange="changeLanguage(this.value)">
+            {% for lang_code, lang_name in LANGUAGES %}
+                {% if lang_code == LANGUAGE_CODE %}
+                    <option value="{{ lang_code }}" selected>{{ lang_name }}</option>
+                {% else %}
+                    <option value="{{ lang_code }}">{{ lang_name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </form>
+
+    <script>
+        function changeLanguage(languageCode) {
+            const form = document.getElementById('languageForm');
+            form.elements.language.value = languageCode;
+            form.submit();
+        }
+    </script>
+
+    <h1>{% trans recipe.title %}</h1>
+    <p>{% trans "Original Description:" %} {{ recipe.description }}</p>
+    <p>{% trans "Translated Description:" %} {{ translated_description }}</p>
+    <p>{% trans "Author:" %} {{ recipe.author }}</p>
+    <p>{% trans "Ingredients:" %} {{ recipe.ingredients }}</p>
+
+</body>
+</html>

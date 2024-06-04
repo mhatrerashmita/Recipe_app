@@ -1,0 +1,127 @@
+{% comment %} <div class="bg-warning text-secondary px-4 py-5 text-center">
+    <div class="py-5">
+      <h1 class="display-5 fw-bold text-white">Dark mode hero</h1>
+      <div class="col-lg-6 mx-auto">
+        <p class="fs-5 mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <button type="button" class="btn btn-outline-dark btn-lg px-4 me-sm-3 fw-bold">Custom button</button>
+          <button type="button" class="btn btn-outline-light btn-lg px-4">Secondary</button>
+        </div>
+      </div>
+    </div>
+  </div> {% endcomment %}
+  {% comment %} <footer class="bg-warning text-secondary py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <h3>Contact Us</h3>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-envelope"></i> Email: example@example.com</li>
+                    <li><i class="fas fa-phone"></i> Phone: +1234567890</li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <h3>Location</h3>
+                <p><i class="fas fa-map-marker-alt"></i> 123 Main Street, City, Country</p>
+            </div>
+            <div class="col-lg-4">
+                <h3>Features</h3>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-search"></i> Search recipes by name</li>
+                    <li><i class="fas fa-filter"></i> Filter recipes by category</li>
+                    <li><i class="far fa-heart"></i> Save your favorite recipes</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer> {% endcomment %}
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+<style>
+    body{margin-top:20px;}
+.footer {
+    background:#232a34;
+	padding-bottom: 50px;
+	padding-top: 80px;
+}
+.footer_menu {
+	margin-bottom: 20px;
+}
+.footer_menu ul {
+	list-style: none;
+	text-align: center;
+}
+.footer_menu ul li{display: inline-block;}
+.footer_menu ul li a {
+	color:#fff;
+	padding: 0 10px;
+	-webkit-transition: 0.3s;
+	transition: 0.3s;
+}
+.footer_menu ul li a:hover{color:#554c86;}
+
+/*START FOOTER SOCIAL DESIGN*/
+.footer_profile{margin-bottom:40px;}
+.footer_profile ul{
+list-style: outside none none;
+margin: 0;
+padding: 0
+}
+.footer_profile ul li{
+display: inline-block;
+}
+@media only screen and (max-width:480px) { 
+.footer_profile ul li{margin:2px;}
+}
+.footer_profile ul li a img{width:60px;}
+
+.footer_profile ul li a {
+	background: #554c86;
+	width: 40px;
+	height: 40px;
+	display: block;
+	text-align: center;
+	margin-right: 5px;
+	border-radius: 50%;
+	line-height: 40px;
+	box-sizing: border-box;
+	text-decoration: none;
+	-webkit-transition: .3s;
+	transition: .3s;
+	color: #fff;
+}
+.footer_copyright {
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    color: #fff;
+</style>
+<div class="footer">
+	<div class="container">		
+		<div class="row text-center">						
+			<div class="col-lg-12 col-sm-12 col-xs-12">
+				<div class="footer_menu">
+					<ul>
+						<li><a href="{% url 'home'%}">Home</a></li>
+						<li><a href="{% url 'about'%}">About</a></li>
+						<li><a href="{% url 'services'%}">Service</a></li>
+						<li><a href="{% url 'contact'%}">Contact</a></li>
+					</ul>
+				</div>						
+				<div class="footer_copyright">
+					<p>© 2021 Sai. All Rights Reserved.</p>
+				</div>	
+				<div class="footer_profile">
+					<ul>
+						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+						<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+						<li><a href="#"><i class="fa fa-instagram"></i></a></li>
+						<li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+					</ul>
+				</div>						
+			</div><!--- END COL -->							
+		</div><!--- END ROW -->					
+	</div><!--- END CONTAINER -->
+</div>
